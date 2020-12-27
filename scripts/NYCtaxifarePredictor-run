@@ -1,27 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# Import from the standard library
-from os.path import split
-import argparse
-import pandas as pd
 
-# Import from NYCtaxifarePredictor
-import NYCtaxifarePredictor
-from NYCtaxifarePredictor.lib import clean_data
+from NYCtaxifarePredictor.data import get_data
+from NYCtaxifarePredictor.trainer import Trainer
 
-if __name__ == '__main__':
-    usage = '%(prog)s'
-    description = 'NYCtaxifarePredictor_description'
-    # https://docs.python.org/3/library/argparse.html
-    # https://docs.python.org/3/howto/argparse.html
-    parser = argparse.ArgumentParser(description=description, usage=usage)
-    args = parser.parse_args()
-    folder_source, _ = split(NYCtaxifarePredictor.__file__)
-    df = pd.read_csv('{}/data/data.csv.gz'.format(folder_source))
-    print('  NYCtaxifarePredictor/data/data.csv.gz Loaded')
-
-    res = clean_data(df)
-    res.to_csv('out.csv', index=False)
-    print('==> out.csv MADE ')
-    print('    shape is {}'.format(res.shape))
+if __name__=='__main__':
+    df = get_data(n=10000)
+    xgb = Trainer(df)
+    xgb.train_model()
+    xgb.evaluate()
