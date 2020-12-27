@@ -31,6 +31,7 @@ class Trainer():
                                                     n_estimators=[100],
                                                     max_depth=[5],
                                                     min_child_weight=[2]))
+        self.run_name = self.kwargs.get('run_name', 'unknown')
         self.nrows = df.shape[0]
         print(colored('---------------------- loading data  ----------------------', 'green'))
         self.pipeline = None
@@ -92,9 +93,14 @@ class Trainer():
         print(colored('---------------------- start training  ----------------------', 'green'))
         start = time.time()
         self.pipeline = clf.fit(self.train[self.X], self.train[self.y])
-        print(colored('---------------------- best_params ----------------------', 'red'))
         end = time.time()
         self.train_time = int(end-start)
+        print('Grid Scores:')
+        means = self.pipeline.cv_results_['mean_test_score']
+        stds = self.pipeline.cv_results_['std_test_score']
+        for mean, std, params in zip(means, stds, self.pipeline.cv_results_['params']):
+            print(f'rmse = {-round(mean,3)} (+/-{round(std,3)}) for {params}')
+        print(colored('---------------------- best_params ----------------------', 'red'))
         print(self.pipeline.best_params_)
         print('train time:', self.train_time)
 
@@ -115,17 +121,27 @@ class Trainer():
         print(colored(f'----------------------  test_RMSE: {test_rmse}  ----------------------', 'red'))
         if self.mlflow:
             print(colored('---------------------- logging params and metrics  ----------------------', 'green'))
-            self.mlflow_client.log_param(self.mlflow_run.info.run_id, 'nrows', self.nrows)
-            self.mlflow_client.log_param(self.mlflow_run.info.run_id, 'split', self.split)
-            if self.split:
-                self.mlflow_client.log_param(self.mlflow_run.info.run_id, 'split_params', self.split_params)
-            self.mlflow_client.log_param(self.mlflow_run.info.run_id, 'estimator', self.estimator)
-            self.mlflow_client.log_param(self.mlflow_run.info.run_id, 'grid_params', self.estimator_params)
-            for key, val in self.pipeline.best_params_.items():
-                self.mlflow_client.log_param(self.mlflow_run.info.run_id, 'best'+ key[5:], val)
-            self.mlflow_client.log_metric(self.mlflow_run.info.run_id, 'train_RMSE', train_rmse)
-            self.mlflow_client.log_metric(self.mlflow_run.info.run_id, 'test_RMSE', test_rmse)
-            self.mlflow_client.log_metric(self.mlflow_run.info.run_id, 'train_time', self.train_time)
+            # logging params and metrics of each search in grid_search
+            means = self.pipeline.cv_results_['mean_test_score']
+            stds = self.pipeline.cv_results_['std_test_score']
+            for mean, std, params in zip(means, stds, self.pipeline.cv_results_['params']):
+                with mlflow.start_run(experiment_id=self.mlflow_experiment_id, run_name=self.run_name+'_grid_search'):
+                    for key, val in params.items():
+                        mlflow.log_param(key[7:], val)
+                    mlflow.log_metric('cv_RMSE', -mean)
+            # logging params and metrics of trainer
+            with mlflow.start_run(experiment_id=self.mlflow_experiment_id, run_name=self.run_name):
+                mlflow.log_param('nrows', self.nrows)
+                mlflow.log_param('split', self.split)
+                if self.split:
+                    mlflow.log_param('split_params', self.split_params)
+                mlflow.log_param('estimator', self.estimator)
+                mlflow.log_param('grid_params', self.estimator_params)
+                for key, val in self.pipeline.best_params_.items():
+                    mlflow.log_param('best' + key[5:], val)
+                mlflow.log_metric('train_RMSE', train_rmse)
+                mlflow.log_metric('test_RMSE', test_rmse)
+                mlflow.log_metric('train_time', self.train_time)
 
     def predict(self, test):
         if self.pipeline is None:
@@ -155,13 +171,9 @@ class Trainer():
         except:
             return self.mlflow_client.get_experiment_by_name(experiment_name).experiment_id
 
-    @memoized_property
-    def mlflow_run(self):
-        return self.mlflow_client.create_run(self.mlflow_experiment_id)
-
 
 if __name__=='__main__':
     df = get_data(n=1000)
     xgb = Trainer(df)
-    xgb.train()
+    xgb.train_model()
     xgb.evaluate()
