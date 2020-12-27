@@ -1,0 +1,16 @@
+MANIFEST.in
+README.md
+setup.py
+NYCtaxifarePredictor/__init__.py
+NYCtaxifarePredictor/data.py
+NYCtaxifarePredictor/tools.py
+NYCtaxifarePredictor/trainer.py
+NYCtaxifarePredictor/transformer.py
+NYCtaxifarePredictor.egg-info/PKG-INFO
+NYCtaxifarePredictor.egg-info/SOURCES.txt
+NYCtaxifarePredictor.egg-info/dependency_links.txt
+NYCtaxifarePredictor.egg-info/not-zip-safe
+NYCtaxifarePredictor.egg-info/top_level.txt
+scripts/NYCtaxifarePredictor-run
+tests/__init__.py
+tests/lib_test.py
