@@ -5,9 +5,6 @@ pandas
 numpy
 pytest
 coverage
-flake8
-black
-yapf
 python-gitlab
 twine
 matplotlib
@@ -24,3 +21,4 @@ termcolor
 mlflow
 memoized_property
 joblib
+google-cloud-storage
