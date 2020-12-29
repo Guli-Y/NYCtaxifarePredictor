@@ -2,11 +2,12 @@
 # -*- coding: utf-8 -*-
 
 
-from NYCtaxifarePredictor.data import get_data
+from NYCtaxifarePredictor.data import get_data, clean_data
 from NYCtaxifarePredictor.trainer import Trainer
 
 if __name__=='__main__':
     df = get_data(n=10000)
+    df = clean_data(df)
     xgb = Trainer(df)
     xgb.train_model()
     xgb.evaluate()
