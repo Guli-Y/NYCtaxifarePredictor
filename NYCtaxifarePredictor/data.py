@@ -12,7 +12,12 @@ def get_data(n=2000000):
     df = pd.read_csv(url, nrows=n, encoding='utf-8')
     return df
 
-def clean_train(df):
+def get_test_data():
+    url = 'gs://nyc_taxifare_predictor/data/test.csv'
+    df = pd.read_csv(url)
+    return df
+
+def clean_data(df):
     df = df.copy()
     # dropping the trips that are not involving NYC
     idx_1 = df.pickup_longitude.between(-79.7624,-71.7517) & df.pickup_latitude.between(40.4772,45.0153)
