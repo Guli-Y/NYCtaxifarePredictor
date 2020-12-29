@@ -1,7 +1,7 @@
 # -*- coding: UTF-8 -*-
 
 # Import from standard library
-from NYCtaxifarePredictor.data import get_data, clean_train
+from NYCtaxifarePredictor.data import get_data, clean_data
 import pytest
 
 
@@ -11,5 +11,5 @@ def test_get_data():
 
 def test_clean_data():
     df = get_data(n=1000)
-    df_clean = clean_train(df)
+    df_clean = clean_data(df)
     assert df_clean.shape == (976, 9)
