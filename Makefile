@@ -1,21 +1,38 @@
 # ----------------------------------
+#          GCP
+# ----------------------------------
+JOB_NAME=nyc_taxifare_predictor_pipeline_$(shell date +'%Y%m%d_%H%M%S')
+BUCKET_NAME=nyc_taxifare_predictor
+BUCKET_TRAINING_FOLDER=trainings
+PACKAGE_NAME=NYCtaxifarePredictor
+FILENAME=trainer
+PYTHON_VERSION=3.7
+RUNTIME_VERSION=2.3
+REGION=europe-west1
+
+run_locally:
+	@python -m ${PACKAGE_NAME}.${FILENAME}
+
+
+train_on_gcp:
+	gcloud ai-platform jobs submit training ${JOB_NAME} \
+					--job-dir gs://${BUCKET_NAME}/${BUCKET_TRAINING_FOLDER} \
+					--package-path ${PACKAGE_NAME} \
+					--module-name ${PACKAGE_NAME}.${FILENAME}	\
+					--python-version=${PYTHON_VERSION} \
+					--runtime-version=${RUNTIME_VERSION} \
+					--region ${REGION}
+					--stream-logs
+
+# ----------------------------------
 #          INSTALL & TEST
 # ----------------------------------
 install_requirements:
 	@pip install -r requirements.txt
 
-check_code:
-	@flake8 scripts/* NYCtaxifarePredictor/*.py
-
-black:
-	@black scripts/* NYCtaxifarePredictor/*.py
-
 test:
 	@coverage run -m pytest tests/*.py
 	#@coverage report -m --omit=$(VIRTUAL_ENV)/lib/python*
-
-ftest:
-	@Write me
 
 clean:
 	@rm -f */version.txt
@@ -28,24 +45,13 @@ clean:
 install:
 	@pip install . -U
 
-all: clean install test black check_code
+all: clean install test
 
 
 uninstal:
 	@python setup.py install --record files.txt
 	@cat files.txt | xargs rm -rf
 	@rm -f files.txt
-
-count_lines:
-	@find ./ -name '*.py' -exec  wc -l {} \; | sort -n| awk \
-        '{printf "%4s %s\n", $$1, $$2}{s+=$$0}END{print s}'
-	@echo ''
-	@find ./scripts -name '*-*' -exec  wc -l {} \; | sort -n| awk \
-		        '{printf "%4s %s\n", $$1, $$2}{s+=$$0}END{print s}'
-	@echo ''
-	@find ./tests -name '*.py' -exec  wc -l {} \; | sort -n| awk \
-        '{printf "%4s %s\n", $$1, $$2}{s+=$$0}END{print s}'
-	@echo ''
 
 # ----------------------------------
 #      UPLOAD PACKAGE TO PYPI
