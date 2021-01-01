@@ -9,4 +9,4 @@ groupama/data/base_pno.*
 .DS_Store
 .idea/
 .env
-*.egg-info/
+NYCtaxifarePredictor.egg-info/
