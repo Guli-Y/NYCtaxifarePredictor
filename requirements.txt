@@ -8,7 +8,7 @@ coverage
 twine
 matplotlib
 seaborn
-gcsfs==0.6.0
+gcsfs==0.7.0
 simplejson
 scikit-learn
 statsmodels
@@ -18,7 +18,7 @@ termcolor
 mlflow
 memoized_property
 joblib
-google-cloud-storage==1.26.0
+google-cloud-storage
 python-dotenv
 flask==1.1.1
 flask-cors
