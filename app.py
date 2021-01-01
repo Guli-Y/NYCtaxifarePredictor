@@ -3,6 +3,8 @@ from flask_cors import CORS
 from datetime import datetime
 from NYCtaxifarePredictor.gcp import load_model
 import pandas as pd
+import joblib
+
 
 app = Flask(__name__)
 CORS(app)
@@ -26,7 +28,7 @@ def format_input(input):
 def index():
     return 'OK'
 
-PIPELINE = load_model(version_name='RunNo4')
+PIPELINE = joblib.load('data/models_xgboost_RunNo4_model.joblib')
 
 @app.route('/predict_fare', methods=['GET', 'POST'])
 def predict_fare():
