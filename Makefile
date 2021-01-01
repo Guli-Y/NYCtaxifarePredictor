@@ -1,7 +1,7 @@
 # ----------------------------------
 #          GCP
 # ----------------------------------
-JOB_NAME=nyc_taxifare_predictor_pipeline_$(shell date +'%Y%m%d_%H%M%S')
+JOB_NAME=nyc_taxifare_predictor_RunNo6_$(shell date +'%Y%m%d')
 BUCKET_NAME=nyc_taxifare_predictor
 BUCKET_TRAINING_FOLDER=trainings
 PACKAGE_NAME=NYCtaxifarePredictor
@@ -21,7 +21,7 @@ train_on_gcp:
 					--module-name ${PACKAGE_NAME}.${FILENAME}	\
 					--python-version=${PYTHON_VERSION} \
 					--runtime-version=${RUNTIME_VERSION} \
-					--region ${REGION}
+					--region ${REGION} \
 					--stream-logs
 
 # ----------------------------------

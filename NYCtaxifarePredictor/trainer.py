@@ -16,13 +16,17 @@ import time
 from google.cloud import storage
 import os
 import joblib
+from dotenv import load_dotenv
+
 ################################# MLflow ###################################
-MLFLOW_URI = "https://mlflow.lewagon.co/"
+dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
+load_dotenv(dotenv_path)
+MLFLOW_URI = os.getenv('MLFLOW_URI')
 EXPERIMENT_NAME = '[DE][Berlin][Guli]NYCtaxifarePredictor'
 ################################# GCP ######################################
 BUCKET_NAME = 'nyc_taxifare_predictor'
 MODEL_NAME = 'xgboost'
-VERSION_NAME = 'RunNo1'
+VERSION_NAME = 'RunNo6'
 
 class Trainer():
     X = ['pickup_datetime',
@@ -199,9 +203,9 @@ if __name__=='__main__':
     df = get_data(n=1000000)
     xgb = Trainer(df, mlflow=True, run_name=VERSION_NAME, estimator_params=dict(
                                                     n_estimators=[100],
-                                                    max_depth=[5, 6, 7],
-                                                    min_child_weight=[5, 6, 7],
-                                                    learning_rate=[0.08, 0.1, 0.12]
+                                                    max_depth=[10],
+                                                    min_child_weight=[11],
+                                                    learning_rate=[0.08, 0.09, 0.1, 0.11, 0.12, 0.13]
                                                     ))
     xgb.train_model()
     xgb.evaluate()
