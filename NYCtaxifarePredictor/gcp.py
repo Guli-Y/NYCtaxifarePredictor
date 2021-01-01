@@ -5,7 +5,7 @@ import os
 
 BUCKET_NAME = 'nyc_taxifare_predictor'
 MODEL_NAME = 'xgboost'
-VERSION_NAME = 'RunNo1'
+VERSION_NAME = 'tuned_1000000'
 
 def load_model(model_name=MODEL_NAME, version_name=VERSION_NAME):
     client = storage.Client()

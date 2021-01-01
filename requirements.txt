@@ -4,6 +4,7 @@ wheel>=0.29
 pandas
 numpy
 pytest
+converage
 twine
 matplotlib
 seaborn
