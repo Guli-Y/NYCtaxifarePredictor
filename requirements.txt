@@ -22,3 +22,7 @@ mlflow
 memoized_property
 joblib
 google-cloud-storage
+python-dotenv
+flask
+flask-cors
+gunicorn
