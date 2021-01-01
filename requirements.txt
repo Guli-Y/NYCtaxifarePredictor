@@ -12,7 +12,6 @@ seaborn
 gcsfs
 googlemaps
 simplejson
-google-auth-oauthlib
 scikit-learn
 statsmodels
 folium
