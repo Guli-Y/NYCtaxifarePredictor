@@ -26,7 +26,7 @@ EXPERIMENT_NAME = '[DE][Berlin][Guli]NYCtaxifarePredictor'
 ################################# GCP ######################################
 BUCKET_NAME = 'nyc_taxifare_predictor'
 MODEL_NAME = 'xgboost'
-VERSION_NAME = 'RunNo6'
+VERSION_NAME = 'tuned_1000000'
 
 class Trainer():
     X = ['pickup_datetime',
@@ -119,8 +119,6 @@ class Trainer():
     def get_rmse(self, df):
         if self.pipeline is None:
             print(colored("The model hasn't been trained yet", 'red'))
-        if self.val is None:
-            print(colored("Validation data not available. Please consider set split parameter to True.", 'red'))
         y_pred = self.pipeline.predict(df[self.X])
         y_true = df[self.y]
         return round(np.sqrt(np.mean((y_true-y_pred)**2)), 3)
@@ -202,10 +200,10 @@ class Trainer():
 if __name__=='__main__':
     df = get_data(n=1000000)
     xgb = Trainer(df, mlflow=True, run_name=VERSION_NAME, estimator_params=dict(
-                                                    n_estimators=[100],
+                                                    n_estimators=[200],
                                                     max_depth=[10],
                                                     min_child_weight=[11],
-                                                    learning_rate=[0.08, 0.09, 0.1, 0.11, 0.12, 0.13]
+                                                    learning_rate=[0.1]
                                                     ))
     xgb.train_model()
     xgb.evaluate()

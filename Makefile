@@ -1,7 +1,7 @@
 # ----------------------------------
 #          GCP
 # ----------------------------------
-JOB_NAME=nyc_taxifare_predictor_RunNo6_$(shell date +'%Y%m%d')
+JOB_NAME=nyc_taxifare_predictor_$(shell date +'%Y%m%d_%H')
 BUCKET_NAME=nyc_taxifare_predictor
 BUCKET_TRAINING_FOLDER=trainings
 PACKAGE_NAME=NYCtaxifarePredictor
