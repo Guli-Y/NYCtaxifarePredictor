@@ -10,7 +10,6 @@ twine
 matplotlib
 seaborn
 gcsfs
-googlemaps
 simplejson
 scikit-learn
 statsmodels
@@ -26,4 +25,3 @@ flask
 flask-cors
 gunicorn
 cchardet
-
