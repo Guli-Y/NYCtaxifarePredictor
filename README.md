@@ -1,1 +1,1 @@
-- under progress
+[This is a kaggle competition project](https://www.kaggle.com/c/new-york-city-taxi-fare-prediction)
