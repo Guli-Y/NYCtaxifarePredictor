@@ -1,7 +1,7 @@
 # ----------------------------------
 #          GCP
 # ----------------------------------
-JOB_NAME=nyc_taxifare_predictor_$(shell date +'%Y%m%d_%H')
+JOB_NAME=nyc_taxifare_predictor_RunNo8_$(shell date +'%Y%m%d')
 BUCKET_NAME=nyc_taxifare_predictor
 BUCKET_TRAINING_FOLDER=trainings
 PACKAGE_NAME=NYCtaxifarePredictor
@@ -22,7 +22,8 @@ train_on_gcp:
 					--python-version=${PYTHON_VERSION} \
 					--runtime-version=${RUNTIME_VERSION} \
 					--region ${REGION} \
-					--stream-logs
+					--scale-tier CUSTOM \
+					--master-machine-type n1-standard-16
 
 # ----------------------------------
 #          INSTALL & TEST
