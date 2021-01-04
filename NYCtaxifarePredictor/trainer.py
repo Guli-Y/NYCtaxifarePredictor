@@ -26,7 +26,7 @@ EXPERIMENT_NAME = '[DE][Berlin][Guli]NYCtaxifarePredictor'
 ################################# GCP ######################################
 BUCKET_NAME = 'nyc_taxifare_predictor'
 MODEL_NAME = 'xgboost'
-VERSION_NAME = 'tuned_1000000'
+VERSION_NAME = 'RunNo9'
 
 class Trainer():
     X = ['pickup_datetime',
@@ -38,11 +38,12 @@ class Trainer():
         self.mlflow = self.kwargs.get('mlflow', False)
         self.estimator = self.kwargs.get('estimator', MODEL_NAME)
         self.estimator_params = self.kwargs.get('estimator_params',
-                                                dict(learning_rate=[0.12],
+                                                dict(learning_rate=[0.1],
                                                     n_estimators=[100],
-                                                    max_depth=[6],
-                                                    min_child_weight=[6]))
-        self.run_name = self.kwargs.get('run_name', 'unknown')
+                                                    max_depth=[10],
+                                                    min_child_weight=[11]))
+        self.cv = self.kwargs.get('grid_search_cv', 5)
+        self.run_name = self.kwargs.get('run_name', VERSION_NAME)
         self.nrows = df.shape[0]
         print(colored('---------------------- loading data  ----------------------', 'green'))
         self.pipeline = None
@@ -98,7 +99,9 @@ class Trainer():
         self.get_pipeline()
         grid_params = \
                     {'model__'+key: val for key, val in self.estimator_params.items()}
-        clf = GridSearchCV(self.pipeline, param_grid=grid_params, cv=5,
+        clf = GridSearchCV(self.pipeline,
+                            param_grid=grid_params,
+                            cv=self.cv,
                             scoring='neg_root_mean_squared_error',
                             return_train_score=True,
                             verbose=1)
@@ -128,7 +131,7 @@ class Trainer():
         train_rmse = self.get_rmse(self.train)
         print(colored(f'----------------------  train_RMSE: {train_rmse}  ----------------------', 'red'))
         if self.val is None:
-            val_rsme = 'not available'
+            val_rmse = 'not available'
         else:
             val_rmse = self.get_rmse(self.val)
         print(colored(f'----------------------  val_RMSE: {val_rmse}  ----------------------', 'red'))
@@ -149,11 +152,13 @@ class Trainer():
                 mlflow.log_param('split', self.split)
                 if self.split:
                     mlflow.log_param('split_params', self.split_params)
+                mlflow.log_param('grid_search_cv', self.cv)
                 mlflow.log_param('estimator', self.estimator)
                 mlflow.log_param('grid_params', self.estimator_params)
                 for key, val in self.pipeline.best_params_.items():
                     mlflow.log_param('best' + key[5:], val)
-                mlflow.log_metric('val_RMSE', val_rmse)
+                if self.val is not None:
+                    mlflow.log_metric('val_RMSE', val_rmse)
                 mlflow.log_metric('train_RMSE', train_rmse)
                 mlflow.log_metric('train_time', self.train_time)
 
@@ -198,13 +203,13 @@ class Trainer():
 
 
 if __name__=='__main__':
-    df = get_data(n=1000000)
-    xgb = Trainer(df, mlflow=True, run_name=VERSION_NAME, estimator_params=dict(
-                                                    n_estimators=[200],
-                                                    max_depth=[10],
-                                                    min_child_weight=[11],
-                                                    learning_rate=[0.1]
-                                                    ))
+    df = get_data(n=None)
+    xgb = Trainer(df, mlflow=True, split=False, grid_search_cv=2,
+                    estimator_params=dict(n_estimators=[100],
+                                            max_depth=[10],
+                                            min_child_weight=[11],
+                                            learning_rate=[0.1]
+                                            ))
     xgb.train_model()
     xgb.evaluate()
     xgb.save_model()
