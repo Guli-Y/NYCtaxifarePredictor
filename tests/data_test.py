@@ -10,7 +10,3 @@ def test_clean_data():
     assert df.shape == (1000, 8)
     df_clean = clean_data(df)
     assert df_clean.shape == (976, 9)
-
-def test_secrets():
-    url = get_mlflow_uri()
-    assert url[:6] == 'https:'
