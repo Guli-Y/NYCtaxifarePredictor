@@ -10,16 +10,9 @@ MODEL_NAME = 'xgboost'
 VERSION_NAME = 'RunNo6'
 
 def get_credentials():
-    key = 'GOOGLE_APPLICATION_CREDENTIALS'
-    if key in os.environ:
-        cred_file = os.environ.get(key)
-    else:
-        print('Google application credentials not found')
-    if '.json' in cred_file:
-        cred_file = open(cred_file).read()
-    cred_json = json.loads(cred_file)
-    cred_gcp = service_account.Credentials.from_service_account_info(cred_json)
-    return cred_gcp
+    json_path = os.environ.get('GOOGLE_APPLICATION_CREDENTIALS')
+    creds_gcp = service_account.Credentials.from_service_account_file(json_path)
+    return creds_gcp
 
 def load_model(model_name=MODEL_NAME, version_name=VERSION_NAME):
     client = storage.Client(credentials=get_credentials(), project='wagon-project-guli')
@@ -32,4 +25,4 @@ def load_model(model_name=MODEL_NAME, version_name=VERSION_NAME):
     return model
 
 if __name__ == '__main__':
-    get_credentials()
+    load_model()
