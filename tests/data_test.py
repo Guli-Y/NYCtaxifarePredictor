@@ -13,4 +13,4 @@ def test_clean_data():
 
 def test_secrets():
     url = get_mlflow_uri()
-    assert url[:6] == 'https:':
+    assert url[:6] == 'https:'
