@@ -3,11 +3,9 @@
 build/
 dist/
 .coverage
-model.joblib
 .ipynb_checkpoints
 *.iml
 groupama/data/base_pno.*
 .DS_Store
 .idea/
-.env
 NYCtaxifarePredictor.egg-info/
