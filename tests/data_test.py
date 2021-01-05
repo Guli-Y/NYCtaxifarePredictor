@@ -2,6 +2,7 @@
 
 # Import from standard library
 from NYCtaxifarePredictor.data import get_data, clean_data
+from NYCtaxifarePredictor.trainer import get_mlflow_uri
 import pytest
 
 def test_clean_data():
@@ -9,3 +10,7 @@ def test_clean_data():
     assert df.shape == (1000, 8)
     df_clean = clean_data(df)
     assert df_clean.shape == (976, 9)
+
+def test_secrets():
+    url = get_mlflow_uri()
+    assert url[:6] == 'https:':
