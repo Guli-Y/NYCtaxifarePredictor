@@ -19,12 +19,9 @@ import joblib
 from dotenv import load_dotenv
 
 ################################# MLflow ###################################
-def get_mlflow_uri():
-    dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')
-    load_dotenv(dotenv_path)
-    return os.getenv('MLFLOW_URI')
-
-MLFLOW_URI = get_mlflow_uri()
+dotenv_path = os.path.join(os.path.dirname(__file__), '..', '.env')
+load_dotenv(dotenv_path)
+MLFLOW_URI = os.getenv('MLFLOW_URI')
 EXPERIMENT_NAME = '[DE][Berlin][Guli]NYCtaxifarePredictor'
 ################################# GCP ######################################
 BUCKET_NAME = 'nyc_taxifare_predictor'
