@@ -16,8 +16,6 @@ X = ['pickup_datetime',
         'dropoff_longitude',
         'dropoff_latitude']
 
-st.markdown('https://github.com/Guli-Y/NYCtaxifarePredictor')
-
 def geocoder(address, key= HERE_API_KEY):
     geoapi = herepy.GeocoderApi(api_key=key)
     result = geoapi.free_form(address).as_dict()
@@ -35,6 +33,10 @@ def format_input(pickup, dropoff):
     return formated_input
 
 def main():
+    st.set_page_config(page_title="nyc-taxifare-predictor",
+                    page_icon=":oncoming_taxi:",
+                    layout="centered")
+    st.markdown('https://github.com/Guli-Y/NYCtaxifarePredictor')
     pipe = joblib.load('model.joblib')
     print('------------ loaded model ---------------')
     st.header('NYC Taxi Fare Predictor :taxi:')
