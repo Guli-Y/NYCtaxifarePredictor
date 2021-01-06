@@ -16,7 +16,7 @@ X = ['pickup_datetime',
         'dropoff_longitude',
         'dropoff_latitude']
 
-def geocoder(address, key= HERE_API_KEY):
+def geocoder(address, key=HERE_API_KEY):
     geoapi = herepy.GeocoderApi(api_key=key)
     result = geoapi.free_form(address).as_dict()
     coords = result["items"][0]["position"]
