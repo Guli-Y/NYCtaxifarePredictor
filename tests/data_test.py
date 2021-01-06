@@ -2,7 +2,6 @@
 
 # Import from standard library
 from NYCtaxifarePredictor.data import get_data, clean_data
-from NYCtaxifarePredictor.trainer import get_mlflow_uri
 import pytest
 
 def test_clean_data():
