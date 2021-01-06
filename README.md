@@ -5,4 +5,5 @@ It includes data exploration (Geospatial analysis), featureengineering (includes
 fine tuning XGBoost model, creating an API, and continuious deployment on Heroku.
 
 Check out the NYC Taxi Fare Predictor API from here: https://github.com/Guli-Y/NYCtaxifarePredictorAPI
+
 Check out my NYC Taxi Fare Predictor web : https://nyc-taxifare-predictor.herokuapp.com/
