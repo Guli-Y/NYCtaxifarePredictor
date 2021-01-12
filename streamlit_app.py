@@ -55,6 +55,7 @@ def main():
     st.write(':oncoming_taxi: *Fare Amount*', fare, ':heavy_dollar_sign:')
     locations = pd.DataFrame([pickup_coords, dropoff_coords])
     st.map(data=locations, zoom=11)
+    st.markdown('Note: The model was trained on the data sets that were recorded between 2008 and 2015, and thus the predicted fare might not apply to current dates. This project is purely for training purpose.')
 
 if __name__ == '__main__':
     main()
