@@ -4,6 +4,8 @@ This project is about predicting taxi fare amount for a given trip in New York C
 It includes data exploration (Geospatial analysis), featureengineering (includes transforming cyclical features),
 fine tuning XGBoost model, creating an API, and continuious deployment on Heroku.
 
-Check out the NYC Taxi Fare Predictor API from here: https://github.com/Guli-Y/NYCtaxifarePredictorAPI
+the :oncoming_taxi: NYC Taxi Fare Predictor API :point_right: https://github.com/Guli-Y/NYCtaxifarePredictorAPI
 
-Check out my NYC Taxi Fare Predictor web : https://nyc-taxifare-predictor.herokuapp.com/
+web app :point_right: https://nyc-taxifare-predictor.herokuapp.com/   :hourglass_flowing_sand: first load will take 1 minutes
+
+Note that this project is only for practicing and the model was trained on older datasets. Therefore the predicted fare can't be trusted. 
